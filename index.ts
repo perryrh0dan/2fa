@@ -1,8 +1,3 @@
-'use strict';
-
-import { randomBytes } from 'crypto'
-var url = require('url');
-
 /**
  * Calculate counter value based on given options. A counter value converts a
  * TOTP time into a counter value by finding the number of time steps that have
@@ -45,90 +40,6 @@ exports._counter = function _counter (options) {
  *   URL's QR code.
  * @property {String} otpauth_url Google Authenticator-compatible otpauth URL.
  */
-
-/**
- * Generates a random secret with the set A-Z a-z 0-9 and symbols, of any length
- * (default 32). Returns the secret key in ASCII, hexadecimal, and base32 format,
- * along with the URL used for the QR code for Google Authenticator (an otpauth
- * URL). Use a QR code library to generate a QR code based on the Google
- * Authenticator URL to obtain a QR code you can scan into the app.
- *
- * @param {Object} options
- * @param {Integer} [options.length=32] Length of the secret
- * @param {Boolean} [options.symbols=false] Whether to include symbols
- * @param {Boolean} [options.otpauth_url=true] Whether to output a Google
- *   Authenticator-compatible otpauth:// URL (only returns otpauth:// URL, no
- *   QR code)
- * @param {String} [options.name] The name to use with Google Authenticator.
- * @param {Boolean} [options.qr_codes=false] (DEPRECATED. Do not use to prevent
- *   leaking of secret to a third party. Use your own QR code implementation.)
- *   Output QR code URLs for the token.
- * @param {Boolean} [options.google_auth_qr=false] (DEPRECATED. Do not use to
- *   prevent leaking of secret to a third party. Use your own QR code
- *   implementation.) Output a Google Authenticator otpauth:// QR code URL.
- * @param {String} [options.issuer=''] The provider or service with which the
- *   secret key is associated.
- * @return {Object}
- * @return {GeneratedSecret} The generated secret key.
- */
-exports.generateSecret = function generateSecret (options) {
-  // options
-  if (!options) options = {};
-  var length = options.length || 32;
-  var name = options.name || 'SecretKey';
-  var qr_codes = options.qr_codes || false;
-  var google_auth_qr = options.google_auth_qr || false;
-  var otpauth_url = options.otpauth_url != null ? options.otpauth_url : true;
-  var symbols = true;
-  var issuer = options.issuer;
-
-  // turn off symbols only when explicity told to
-  if (options.symbols !== undefined && options.symbols === false) {
-    symbols = false;
-  }
-
-  // generate an ascii key
-  var key = this.generateSecretASCII(length, symbols);
-
-  // return a SecretKey with ascii, hex, and base32
-  var SecretKey = {};
-  SecretKey.ascii = key;
-  SecretKey.hex = Buffer(key, 'ascii').toString('hex');
-  SecretKey.base32 = base32.encode(Buffer(key)).toString().replace(/=/g, '');
-
-  // add in the Google Authenticator-compatible otpauth URL
-  if (otpauth_url) {
-    SecretKey.otpauth_url = exports.otpauthURL({
-      secret: SecretKey.ascii,
-      label: name,
-      issuer: issuer
-    });
-  }
-
-  return SecretKey;
-};
-
-/**
- * Generates a key of a certain length (default 32) from A-Z, a-z, 0-9, and
- * symbols (if requested).
- *
- * @param  {Integer} [length=32]  The length of the key.
- * @param  {Boolean} [symbols=false] Whether to include symbols in the key.
- * @return {String} The generated key.
- */
-exports.generateSecretASCII = function generateSecretASCII (length, symbols) {
-  var bytes = randomBytes(length || 32);
-  var set = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
-  if (symbols) {
-    set += '!@#$%^&*()<>?/[]{},.:;';
-  }
-
-  var output = '';
-  for (var i = 0, l = bytes.length; i < l; i++) {
-    output += set[Math.floor(bytes[i] / 255.0 * (set.length - 1))];
-  }
-  return output;
-};
 
 /**
  * Generate a Google Authenticator-compatible otpauth:// URL for passing the

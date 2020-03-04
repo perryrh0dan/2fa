@@ -26,24 +26,7 @@ export interface VerifyOptions extends GenerateOptions{
  *
  * Under the hood, TOTP calculates the counter value by finding how many time
  * steps have passed since the epoch, and calls HOTP with that counter value.
- *
- * @param {Object} options
- * @param {String} options.secret Shared secret key
- * @param {Integer} [options.time] Time in seconds with which to calculate
- *   counter value. Defaults to `Date.now()`.
- * @param {Integer} [options.step=30] Time step in seconds
- * @param {Integer} [options.epoch=0] Initial time in seconds since the UNIX
- *   epoch from which to calculate the counter value. Defaults to 0 (no offset).
- * @param {Integer} [options.counter] Counter value, calculated by default.
- * @param {Integer} [options.digits=6] The number of digits for the one-time
- *   passcode.
- * @param {String} [options.encoding="ascii"] Key encoding (ascii, hex,
- *   base32, base64).
- * @param {String} [options.algorithm="sha1"] Hash algorithm (sha1, sha256,
- *   sha512).
- * @return {String} The one-time passcode.
  */
-
 export function totpGenerate(options: GenerateOptions): string {
   // calculate default counter value
   if (options.counter == null) options.counter = exports._counter(options);
@@ -70,34 +53,7 @@ export function totpGenerate(options: GenerateOptions): string {
  * tokens from 2.5 minutes ago to 2.5 minutes in the future, inclusive.
  * If it finds it at counter position 1002, it will return `{ delta: 2 }`.
  * If it finds it at counter position 997, it will return `{ delta: -3 }`.
- *
- * @param {Object} options
- * @param {String} options.secret Shared secret key
- * @param {String} options.token Passcode to validate
- * @param {Integer} [options.time] Time in seconds with which to calculate
- *   counter value. Defaults to `Date.now()`.
- * @param {Integer} [options.step=30] Time step in seconds
- * @param {Integer} [options.epoch=0] Initial time in seconds since the UNIX
- *   epoch from which to calculate the counter value. Defaults to 0 (no offset).
- * @param {Integer} [options.counter] Counter value, calculated by default.
- * @param {Integer} [options.digits=6] The number of digits for the one-time
- *   passcode.
- * @param {Integer} [options.window=0] The allowable margin for the counter.
- *   The function will check "W" codes in the future and the past against the
- *   provided passcode, e.g. if W = 5, and C = 1000, this function will check
- *   the passcode against all One Time Passcodes between 995 and 1005,
- *   inclusive.
- * @param {String} [options.encoding="ascii"] Key encoding (ascii, hex,
- *   base32, base64).
- * @param {String} [options.algorithm="sha1"] Hash algorithm (sha1, sha256,
- *   sha512).
- * @return {Object} On success, returns an object with the time step
- *   difference between the client and the server as the `delta` property (e.g.
- *   `{ delta: 0 }`).
- * @method totp․verifyDelta
- * @global
  */
-
 exports.totp.verifyDelta = function totpVerifyDelta(options: VerifyOptions) {
   // shadow options
   options = Object.create(options);
@@ -135,32 +91,7 @@ exports.totp.verifyDelta = function totpVerifyDelta(options: VerifyOptions) {
  * verifies. Helper function for verifyDelta() that returns a boolean instead of
  * an object. For more on how to use a window with this, see
  * {@link totp.verifyDelta}.
- *
- * @param {Object} options
- * @param {String} options.secret Shared secret key
- * @param {String} options.token Passcode to validate
- * @param {Integer} [options.time] Time in seconds with which to calculate
- *   counter value. Defaults to `Date.now()`.
- * @param {Integer} [options.step=30] Time step in seconds
- * @param {Integer} [options.epoch=0] Initial time in seconds  since the UNIX
- *   epoch from which to calculate the counter value. Defaults to 0 (no offset).
- * @param {Integer} [options.counter] Counter value, calculated by default.
- * @param {Integer} [options.digits=6] The number of digits for the one-time
- *   passcode.
- * @param {Integer} [options.window=0] The allowable margin for the counter.
- *   The function will check "W" codes in the future and the past against the
- *   provided passcode, e.g. if W = 5, and C = 1000, this function will check
- *   the passcode against all One Time Passcodes between 995 and 1005,
- *   inclusive.
- * @param {String} [options.encoding="ascii"] Key encoding (ascii, hex,
- *   base32, base64).
- * @param {String} [options.algorithm="sha1"] Hash algorithm (sha1, sha256,
- *   sha512).
- * @return {Boolean} Returns true if the token matches within the given
- *   window, false otherwise.
- * @method totp․verify
- * @global
  */
-exports.totp.verify = function totpVerify(options: VerifyOptions) {
+export function totpVerify(options: VerifyOptions) {
   return exports.totp.verifyDelta(options) != null;
 };
