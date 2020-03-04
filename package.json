@@ -1,0 +1,28 @@
+{
+  "name": "@perryrh0dan/2fa",
+  "productName": "2fa",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "repository": "https://github.com/perryrh0dan/totp",
+  "license": "MIT",
+  "author": {
+    "name": "Thomas Pöhlmann",
+    "email": "thomaspoehlmann96@googlemail.com",
+    "url": "https://github.com/perryrh0dan"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "files": [
+    "i18n",
+    "src",
+    "cli.js"
+  ],
+  "keywords": [
+    "totp"
+  ]
+}
