@@ -12,30 +12,31 @@
     "url": "https://github.com/perryrh0dan"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "gulp buildTest",
+    "test": "npm run unit",
+    "unit": "jest --no-cache"
   },
   "engines": {
     "node": ">=8"
   },
-  "files": [
-    "i18n",
-    "src",
-    "cli.js"
-  ],
   "keywords": [
     "totp"
   ],
   "devDependencies": {
+    "@types/jest": "^25.1.3",
+    "@types/merge-stream": "^1.1.2",
     "@types/node": "^13.7.7",
     "@types/qrcode": "^1.3.4",
     "babel": "^6.23.0",
+    "gulp": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-typescript": "^6.0.0-alpha.1",
     "jest": "^25.1.0",
+    "merge-stream": "^2.0.0",
     "ts-jest": "^25.2.1",
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@types/jest": "^25.1.3",
-    "base32-encode": "^1.1.1",
     "qrcode": "^1.4.4"
   }
 }

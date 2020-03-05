@@ -7,12 +7,31 @@
       {
         "type": "node",
         "request": "launch",
+        "name": "Launch Program",
+        "program": "${workspaceFolder}/dist/test.js",
+        "skipFiles": [
+          "<node_internals>/**"
+        ]
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Launch Current File",
+        "program": "${file}",
+        "skipFiles": [
+          "<node_internals>/**"
+        ]
+      },
+      {
+        "type": "node",
+        "request": "launch",
         "name": "Jest Current File",
         "program": "${workspaceFolder}/node_modules/.bin/jest",
         "args": [
           "${fileBasenameNoExtension}",
           "--config",
-          "jest.config.js"
+          "jest.config.js",
+          "--no-cache"
         ],
         "console": "integratedTerminal",
         "internalConsoleOptions": "neverOpen",

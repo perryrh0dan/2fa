@@ -1,51 +1,46 @@
 import { createHmac } from "crypto";
-
-export interface GenerateOptions {
-  secret: string;
-  counter: number;
-  digest?: Buffer;
-  digits?: number;
-  encoding?: "ascii" | "hex" | "base64";
-  algorithm?: "sha1" | "sha256" | "sha512";
-}
-
-export interface VerifyOptions extends GenerateOptions {
-  token: string;
-  window: number;
-}
+import { base32Decode } from "../base32";
+import { HtopGenerateOptions, HtopVerifyOptions, VerifyDelta } from "./types";
+import { arrayBufferToBuffer } from "../utils";
 
 /**
  * Digest the one-time passcode options.
  */
-export function digest(options: GenerateOptions): Buffer {
-  var i;
-
+export function digest(options: HtopGenerateOptions): Buffer {
   // unpack options
-  var secret = options.secret;
-  var counter = options.counter;
-  var algorithm = (options.algorithm || "sha1").toLowerCase();
+  const secret = options.secret;
+  const counter = options.counter;
+  const encoding = options.encoding || 'ascii'
+  const algorithm = options.algorithm || "sha1"
 
-  var secret_buffer_size;
+  // convert secret to buffer
+  let secretBuffer: Buffer;
+  if (!Buffer.isBuffer(secret)) {
+    if (encoding === 'base32') {
+      const arrayBuffer = base32Decode(secret);
+      secretBuffer = arrayBufferToBuffer(arrayBuffer)
+    } else {
+      secretBuffer = Buffer.from(secret, encoding)
+    }
+  } else {
+    secretBuffer = secret
+  }
+
+
+  let secret_buffer_size;
   if (algorithm === "sha1") {
     secret_buffer_size = 20; // 20 bytes
   } else if (algorithm === "sha256") {
     secret_buffer_size = 32; // 32 bytes
   } else if (algorithm === "sha512") {
     secret_buffer_size = 64; // 64 bytes
-  } else {
-    console.warn(
-      "Speakeasy - The algorithm provided (`" +
-        algorithm +
-        "`) is not officially supported, results may be different than expected."
-    );
   }
 
   // The secret for sha1, sha256 and sha512 needs to be a fixed number of bytes for the one-time-password to be calculated correctly
   // Pad the buffer to the correct size be repeating the secret to the desired length
-  let secretBuffer: Buffer = Buffer.from(secret);
   if (secret_buffer_size && secret.length !== secret_buffer_size) {
     secretBuffer = new Buffer(
-      Array(Math.ceil(secret_buffer_size / secret.length) + 1).join(
+      Array(Math.ceil(secret_buffer_size / secretBuffer.length) + 1).join(
         secretBuffer.toString("hex")
       ),
       "hex"
@@ -53,9 +48,9 @@ export function digest(options: GenerateOptions): Buffer {
   }
 
   // create an buffer from the counter
-  var buf = new Buffer(8);
-  var tmp = counter;
-  for (i = 0; i < 8; i++) {
+  let buf = new Buffer(8);
+  let tmp = counter;
+  for (let i = 0; i < 8; i++) {
     // mask 0xff over number to get last 8
     buf[7 - i] = tmp & 0xff;
 
@@ -64,7 +59,7 @@ export function digest(options: GenerateOptions): Buffer {
   }
 
   // init hmac with the key
-  var hmac = createHmac(algorithm, secretBuffer);
+  const hmac = createHmac(algorithm, secretBuffer);
 
   // update hmac with the counter
   hmac.update(buf);
@@ -79,22 +74,15 @@ export function digest(options: GenerateOptions): Buffer {
  * also specify a token length, as well as the encoding (ASCII, hexadecimal, or
  * base32) and the hashing algorithm to use (SHA1, SHA256, SHA512).
  */
-export function hotpGenerate(options: GenerateOptions): string {
-  // verify counter exists
-  var counter = options.counter;
-
-  if (counter === null || typeof counter === "undefined") {
-    throw new Error("Speakeasy - hotp - Missing counter");
-  }
-
+export function hotpGenerate(options: HtopGenerateOptions): string {
   // unpack options
   const digits = options.digits || 6;
 
   // digest the options
-  let hmacDigest = options.digest || digest(options);
+  const hmacDigest = options.digest || digest(options);
 
   // compute HOTP offset
-  var offset = hmacDigest[hmacDigest.length - 1] & 0xf;
+  const offset = hmacDigest[hmacDigest.length - 1] & 0xf;
 
   // calculate binary code (RFC4226 5.4)
   const code =
@@ -125,9 +113,7 @@ export function hotpGenerate(options: GenerateOptions): string {
  * 10, `verifyDelta()` will look at tokens from 5 to 15, inclusive. If it finds
  * it at counter position 7, it will return `{ delta: 2 }`.
  */
-export function hotpVerifyDelta(options: VerifyOptions): any {
-  var i;
-
+export function hotpVerifyDelta(options: HtopVerifyOptions): VerifyDelta {
   // verify secret and token exist
   var secret = options.secret;
   var token = options.token;
@@ -144,7 +130,7 @@ export function hotpVerifyDelta(options: VerifyOptions): any {
 
   // fail if token is not of correct length
   if (token.length !== digits) {
-    return;
+    throw new Error("Wrong token length")
   }
 
   // parse token to integer
@@ -152,20 +138,20 @@ export function hotpVerifyDelta(options: VerifyOptions): any {
 
   // fail if token is NA
   if (isNaN(tokenNumber)) {
-    return;
+    throw new Error("Cant parse token to number")
   }
 
   // loop from C to C + W inclusive
-  for (i = counter; i <= counter + window; ++i) {
+  for (let i = counter; i <= counter + window; ++i) {
     options.counter = i;
     // domain-specific constant-time comparison for integer codes
-    if (parseInt(exports.hotp(options), 10) === tokenNumber) {
+    if (parseInt(hotpGenerate(options), 10) === tokenNumber) {
       // found a matching code, return delta
       return { delta: i - counter };
     }
   }
 
-  // no codes have matched
+  throw new Error("No matching code found")
 }
 
 /**
@@ -174,6 +160,6 @@ export function hotpVerifyDelta(options: VerifyOptions): any {
  * instead of an object. For more on how to use a window with this, see
  * {@link hotp.verifyDelta}.
  */
-export function hotpVerify(options: VerifyOptions) {
+export function hotpVerify(options: HtopVerifyOptions) {
   return hotpVerifyDelta(options) != null;
 }

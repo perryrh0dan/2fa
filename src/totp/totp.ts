@@ -1,20 +1,6 @@
-import { hotpGenerate } from "./hotp";
-
-export interface GenerateOptions {
-  secret: string;
-  time: number;
-  step: number;
-  epoch: number;
-  counter: number;
-  digits: number;
-  encoding: "ascii" | "hex" | "base64";
-  algorithm: "sha1" | "sha256" | "sha512";
-};
-
-export interface VerifyOptions extends GenerateOptions{
-    token: string
-    window: number
-};
+import { hotpGenerate, hotpVerifyDelta } from "../hotp/hotp";
+import { TotpGenerateOptions, VerifyOptions, CounterOptions } from "./types";
+import { VerifyDelta } from "../hotp";
 
 /**
  * Generate a time-based one-time token. Specify the key, and receive the
@@ -27,12 +13,15 @@ export interface VerifyOptions extends GenerateOptions{
  * Under the hood, TOTP calculates the counter value by finding how many time
  * steps have passed since the epoch, and calls HOTP with that counter value.
  */
-export function totpGenerate(options: GenerateOptions): string {
+export function totpGenerate(options: TotpGenerateOptions): string {
+
   // calculate default counter value
-  if (options.counter == null) options.counter = exports._counter(options);
+  // weird typescript stuff
+  const opts: any = options
+  opts.counter = options.counter || counter(options)
 
   // pass to hotp
-  return hotpGenerate(options);
+  return hotpGenerate(opts)
 };
 
 /**
@@ -54,9 +43,7 @@ export function totpGenerate(options: GenerateOptions): string {
  * If it finds it at counter position 1002, it will return `{ delta: 2 }`.
  * If it finds it at counter position 997, it will return `{ delta: -3 }`.
  */
-exports.totp.verifyDelta = function totpVerifyDelta(options: VerifyOptions) {
-  // shadow options
-  options = Object.create(options);
+export function totpVerifyDelta(options: VerifyOptions): VerifyDelta {
   // verify secret and token exist
   var secret = options.secret;
   var token = options.token;
@@ -69,14 +56,15 @@ exports.totp.verifyDelta = function totpVerifyDelta(options: VerifyOptions) {
   var window = options.window || 0;
 
   // calculate default counter value
-  if (options.counter == null) options.counter = exports._counter(options);
+  const opts: any = options
+  opts.counter = options.counter || counter(options)
 
   // adjust for two-sided window
-  options.counter -= window;
-  options.window += window;
+  opts.counter -= window;
+  opts.window += window;
 
   // pass to hotp.verifyDelta
-  var delta = exports.hotp.verifyDelta(options);
+  var delta = hotpVerifyDelta(opts);
 
   // adjust for two-sided window
   if (delta) {
@@ -93,5 +81,18 @@ exports.totp.verifyDelta = function totpVerifyDelta(options: VerifyOptions) {
  * {@link totp.verifyDelta}.
  */
 export function totpVerify(options: VerifyOptions) {
-  return exports.totp.verifyDelta(options) != null;
+  return totpVerifyDelta(options) != null;
+};
+
+/**
+ * Calculate counter value based on given options. A counter value converts a
+ * TOTP time into a counter value by finding the number of time steps that have
+ * passed since the epoch to the current time.
+ */
+export function counter(options: CounterOptions): number {
+  var step = options.step || 30;
+  var time = options.time != null ? (options.time * 1000) : Date.now();
+
+  var epoch = options.epoch != null ? (options.epoch * 1000) : 0;
+  return Math.floor((time - epoch) / step / 1000);
 };

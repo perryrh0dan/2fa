@@ -14,7 +14,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "cli.ts"
+    "index.ts"
   ],
   "exclude": [
     "node_modules",

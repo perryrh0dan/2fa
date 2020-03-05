@@ -1,2 +1,6 @@
+### General
 node_modules
 dist
+
+### Jest
+coverage
