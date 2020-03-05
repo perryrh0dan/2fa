@@ -161,5 +161,9 @@ export function hotpVerifyDelta(options: HtopVerifyOptions): VerifyDelta {
  * {@link hotp.verifyDelta}.
  */
 export function hotpVerify(options: HtopVerifyOptions) {
-  return hotpVerifyDelta(options) != null;
+  try {
+    return hotpVerifyDelta(options) != null;
+  } catch (error) {
+    return false
+  }
 }

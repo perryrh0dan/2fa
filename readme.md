@@ -7,7 +7,18 @@
 </h4>
 
 <div align="center">
-  
+  <a href="https://travis-ci.org/perryrh0dan/2fa">
+    <img alt="Build Status" src="https://travis-ci.org/perryrh0dan/2fa.svg?branch=master" />
+  </a>
+  <a href="https://codecov.io/gh/perryrh0dan/2fa">
+    <img alt="Code Coverage" src="https://codecov.io/gh/perryrh0dan/2fa/branch/master/graph/badge.svg" />
+  </a>
+  <a href="https://codeclimate.com/github/perryrh0dan/2fa/maintainability">
+    <img src="https://api.codeclimate.com/v1/badges/d54f93a65002540e39ea/maintainability" />
+  </a>
+  <a href="https://www.npmjs.com/package/@perryrh0dan/2fa">
+    <img alt="NPM Downloads" src="https://img.shields.io/npm/dt/@perryrh0dan/2fa" />
+  </a>
 </div>
 
 ## Descriptions
@@ -30,7 +41,7 @@ Open MFA standards are defined in RFC [4226]([https://tools.ietf.org/html/rfc422
 
 ## Install
 
-``` bash
+```bash
 npm install @perryrh0dan/2fa
 ```
 
@@ -38,24 +49,36 @@ npm install @perryrh0dan/2fa
 
 ### Time-based OTPs
 
-``` ts
+```ts
 // Generate secret
-secret = generateSecret("accountName", "issuerName")
+secret = generateSecret({ label: "accountName", issuer: "issuerName" })
 
 // Generate code
-code totpGenerate(secret.secret)
+code = totpGenerate(secret.secret)
 
-// VerifyCode
-totpVerify(code) //true
+// Verify code
+totpVerify({ secret: secret.secret, token: code) //true
 
-// Generate a Provisioning URI
+// Generate a provisioning URI
 secret.otpauthURL()
 // otpauth://totp/issuerName:accountName?secret=4S62BZNFXXSZLCRO&issuer=issuerName
 ```
 
 ### Counter-based OTPs
-``` ts
 
+```ts
+// Generate secret
+secret = generateSecret({ label: "accountName", issuer: "issuerName" })
+
+// Generate code at counter
+code = hotpGenerate(secret.secret, counter)
+
+// Verify code
+hotpVerify({ secret: secret.secret, token: code, counter: counter})
+
+// Generate a provisioning URI
+secret.otpauthURL(counter)
+// otpauth://hotp/issuerName:accountName?secret=4S62BZNFXXSZLCRO&issuer=issuerName&counter=counter
 ```
 
 ## Development

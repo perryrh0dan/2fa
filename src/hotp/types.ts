@@ -9,7 +9,7 @@ export interface HtopGenerateOptions {
 
 export interface HtopVerifyOptions extends HtopGenerateOptions {
   token: string;
-  window: number;
+  window?: number;
 }
 
 export interface VerifyDelta {

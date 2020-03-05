@@ -80,8 +80,12 @@ export function totpVerifyDelta(options: VerifyOptions): VerifyDelta {
  * an object. For more on how to use a window with this, see
  * {@link totp.verifyDelta}.
  */
-export function totpVerify(options: VerifyOptions) {
-  return totpVerifyDelta(options) != null;
+export function totpVerify(options: VerifyOptions): boolean {
+  try {
+    return totpVerifyDelta(options) != null;
+  } catch (error) {
+    return false
+  }
 };
 
 /**
