@@ -114,14 +114,6 @@ export function hotpGenerate(options: HtopGenerateOptions): string {
  * it at counter position 7, it will return `{ delta: 2 }`.
  */
 export function hotpVerifyDelta(options: HtopVerifyOptions): VerifyDelta {
-  // verify secret and token exist
-  var secret = options.secret;
-  var token = options.token;
-  if (secret === null || typeof secret === 'undefined')
-    throw new Error('2fa - hotp.verifyDelta - Missing secret');
-  if (token === null || typeof token === 'undefined')
-    throw new Error('2fa - hotp.verifyDelta - Missing token');
-
   // unpack options
   var token = options.token;
   var digits = options.digits || 6;

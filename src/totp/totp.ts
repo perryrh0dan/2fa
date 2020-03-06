@@ -44,14 +44,6 @@ export function totpGenerate(options: TotpGenerateOptions): string {
  * If it finds it at counter position 997, it will return `{ delta: -3 }`.
  */
 export function totpVerifyDelta(options: VerifyOptions): VerifyDelta {
-  // verify secret and token exist
-  var secret = options.secret;
-  var token = options.token;
-  if (secret === null || typeof secret === 'undefined')
-    throw new Error('Speakeasy - totp.verifyDelta - Missing secret');
-  if (token === null || typeof token === 'undefined')
-    throw new Error('Speakeasy - totp.verifyDelta - Missing token');
-
   // unpack options
   var window = options.window || 0;
 

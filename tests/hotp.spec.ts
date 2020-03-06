@@ -1,4 +1,4 @@
-import { hotpGenerate } from '../src/hotp/hotp';
+import { hotpGenerate, hotpVerifyDelta } from '../src/hotp/hotp';
 
 describe('HOTP Counter-Based Algorithm Test', function () {
   describe('normal operation with secret = "12345678901234567890" at counter 3', function () {
@@ -89,4 +89,22 @@ describe('HOTP Counter-Based Algorithm Test', function () {
       expect(topic).toBe('90693936');
     });
   });
+
+  describe('test verification with wrong token length', function () {
+    it('should throw error', function () {
+      const secret = 'rNONHRni6BAk7y2TiKrv';
+      expect(() => {hotpVerifyDelta({
+        secret: secret, token: '3140971', counter: 1,
+      })}).toThrowError('Wrong token length')
+    })
+  })
+
+  describe('test verification with non numeric token', function () {
+    it('should throw error', function () {
+      const secret = 'rNONHRni6BAk7y2TiKrv';
+      expect(() => {hotpVerifyDelta({
+        secret: secret, token: 'A1409A', counter: 1,
+      })}).toThrowError('Cant parse token to number')
+    })
+  })
 });

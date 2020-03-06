@@ -59,7 +59,7 @@ export class SecretKey {
 
     // require counter for HOTP
     if (type === 'hotp' && typeof options.counter === 'undefined') {
-      throw new Error('Speakeasy - otpauthURL - Missing counter value for HOTP');
+      throw new Error('Missing counter value for HOTP');
     }
 
     var counter = options.counter;
@@ -79,15 +79,6 @@ export class SecretKey {
     }
 
     query.algorithm = algorithm.toUpperCase();
-
-    // validate digits
-    switch (digits) {
-      case 6:
-      case 8:
-        break;
-      default:
-        console.warn('Speakeasy - otpauthURL - Warning - Digits generally should be either 6 or 8');
-    }
     query.digits = digits;
     query.period = period;
 
