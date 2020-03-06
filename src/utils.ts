@@ -5,10 +5,10 @@ export function arrayBufferToBuffer(ab: ArrayBuffer): Buffer {
     buffer[i] = view[i];
   }
 
-  return buffer
+  return buffer;
 }
 
 export function arrayBufferToString(ab: ArrayBuffer): string {
-  const buffer = arrayBufferToBuffer(ab)
-  return buffer.toString()
+  const buffer = arrayBufferToBuffer(ab);
+  return buffer.toString();
 }

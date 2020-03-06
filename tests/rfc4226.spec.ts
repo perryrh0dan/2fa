@@ -1,8 +1,8 @@
-import { hotpGenerate, digest } from "../src/hotp/hotp";
+import { hotpGenerate, digest } from '../src/hotp/hotp';
 
 /*
    The following test data uses the ASCII string
-   "12345678901234567890" for the secret:
+   '12345678901234567890' for the secret:
    Secret = 0x3132333435363738393031323334353637383930
    Table 1 details for each count, the intermediate HMAC value.
    Count    Hexadecimal HMAC-SHA-1(secret, count)
@@ -45,7 +45,7 @@ describe('RFC 4226 test values', function () {
       'a4fb960c0bc06e1eabb804e5b397cdc4b45596fa',
       '1b3c89f65e6c9e883012052823443f048b4332db',
       '1637409809a679dc698207310c8c7fc07290d9e5'
-    ].forEach(function (expected, count) {
+    ].forEach(function (expected: string, count: number) {
       it('should match for counter = ' + count, function () {
         var hash = digest({
           secret: '12345678901234567890',
@@ -68,7 +68,7 @@ describe('RFC 4226 test values', function () {
       '162583',
       '399871',
       '520489'
-    ].forEach(function (expected, count) {
+    ].forEach(function (expected: string, count: number) {
       it('should match for count = ' + count, function () {
         var code = hotpGenerate({
           secret: '12345678901234567890',

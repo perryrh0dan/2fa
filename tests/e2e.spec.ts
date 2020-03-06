@@ -1,20 +1,86 @@
-import { generateSecret } from '../src/secret'
-import { totpGenerate, totpVerify } from '../src/totp'
+import { generateSecret } from '../src/secret';
+import { totpGenerate, totpVerify } from '../src/totp';
+import { hotpGenerate, hotpVerify } from '../src/hotp';
 
-describe("Test totp end to end scenario", function() {
-  it("should be valid", function() {
-    const secret = generateSecret({ label: "accountName", issuer: "issuerName" })
-    const code =  totpGenerate({ secret: secret.secret })
-    const valid = totpVerify({ secret: secret.secret, token: code }) //true
+describe('Test totp in end to end scenario', function () {
+  it('should be valid', function () {
+    const secret = generateSecret({
+      label: 'accountName',
+      issuer: 'issuerName',
+    });
+    const code = totpGenerate({ secret: secret.secret });
+    const valid = totpVerify({ secret: secret.secret, token: code });
 
-    expect(valid).toBe(true)
-  })
+    expect(valid).toBe(true);
+  });
 
-  it("should be invalid", function() {
-    const secret = generateSecret({ label: "accountName", issuer: "issuerName" })
-    const code =  totpGenerate({ secret: secret.secret })
-    const valid = totpVerify({ secret: secret.secret, token: code, window: -1 }) //true
+  it('should be invalid', function () {
+    const secret = generateSecret({
+      label: 'accountName',
+      issuer: 'issuerName',
+    });
+    const code = totpGenerate({ secret: secret.secret });
+    const valid = totpVerify({
+      secret: secret.secret,
+      token: code,
+      window: -1,
+    });
 
-    expect(valid).toBe(false)
-  })
-})
+    expect(valid).toBe(false);
+  });
+});
+
+describe('Test hotp in end to end scenarios', function () {
+  describe('Code generated with counter = 1 should be valid for counter = 1', function () {
+    it('should be valid', function () {
+      const secret = generateSecret({
+        label: 'admin',
+        issuer: 'tpoe.dev',
+      });
+      const code = hotpGenerate({ secret: secret.secret, counter: 1 });
+      const valid = hotpVerify({
+        secret: secret.secret,
+        counter: 1,
+        token: code,
+      });
+
+      expect(valid).toBe(true);
+    });
+  });
+
+  describe('Code generated with counter = 3 should be valid for counter = 1 and window = 2', function () {
+    it('should be valid', function () {
+      const secret = generateSecret({
+        label: 'admin',
+        issuer: 'tpoe.dev',
+      });
+      const code = hotpGenerate({ secret: secret.secret, counter: 3 });
+      const valid = hotpVerify({
+        secret: secret.secret,
+        token: code,
+        counter: 1,
+        window: 2,
+      });
+
+      expect(valid).toBe(true);
+    });
+  });
+
+  describe('code generated with counter = 3 should be invalid for counter = 1 and window = 1', function () {
+    it('should be invalid', function () {
+      const secret = generateSecret({
+        label: 'admin',
+        issuer: 'tpoe.dev',
+      });
+      const code = hotpGenerate({ secret: secret.secret, counter: 3 });
+      const valid = hotpVerify({
+        secret: secret.secret,
+        token: code,
+        counter: 1,
+        window: 1,
+      });
+
+      expect(valid).toBe(false);
+    });
+  });
+});

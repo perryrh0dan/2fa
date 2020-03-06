@@ -1,8 +1,8 @@
-import { generateSecret } from '../src/secret/secret'
+import { generateSecret } from '../src/secret/secret';
 import { base32Encode } from '../src/base32';
 
-describe("Generator tests", function () {
-  it("Normal generation with defaults", async function () {
+describe('Generator tests', function () {
+  it('Normal generation with defaults', async function () {
     var secret = generateSecret();
     expect(secret.secret.length).toBe(32);
     // const image = await secret.image()
@@ -24,10 +24,10 @@ describe("Generator tests", function () {
       issuer: 'Example'
     });
 
-    const buf = new Buffer(secret.secret, 'ascii')
-    const expectedSecret: string = base32Encode(buf).replace(/=/g, '%3D')
+    const buf = new Buffer(secret.secret, 'ascii');
+    const expectedSecret: string = base32Encode(buf).replace(/=/g, '%3D');
 
     const expected = 'otpauth://totp/Example%3Aalice%40google.com?secret=' + expectedSecret + '&issuer=Example&algorithm=SHA1&digits=6&period=30';
-    expect(secret.otpauthURL()).toBe(expected)
+    expect(secret.otpauthURL()).toBe(expected);
   });
 });

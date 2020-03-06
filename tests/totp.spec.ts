@@ -1,63 +1,63 @@
-import { totpGenerate, totpVerifyDelta } from '../src/totp'
+import { totpGenerate, totpVerifyDelta } from '../src/totp';
 
 describe('TOTP Time-Based Algorithm Test', function () {
-  describe("normal operation with secret = '12345678901234567890' at time = 59", function () {
+  describe('normal operation with secret = "12345678901234567890" at time = 59', function () {
     it('should return correct one-time password', function () {
       const topic = totpGenerate({ secret: '12345678901234567890', time: 59 });
       expect(topic).toBe('287082');
     });
   });
 
-  describe("a different time normal operation with secret = '12345678901234567890' at time = 1111111109", function () {
+  describe('a different time normal operation with secret = "12345678901234567890" at time = 1111111109', function () {
     it('should return correct one-time password', function () {
       const topic = totpGenerate({ secret: '12345678901234567890', time: 1111111109 });
       expect(topic).toBe('081804');
     });
   });
 
-  describe("digits parameter with secret = '12345678901234567890' at time = 1111111109 and digits = 8", function () {
+  describe('digits parameter with secret = "12345678901234567890" at time = 1111111109 and digits = 8', function () {
     it('should return correct one-time password', function () {
       const topic = totpGenerate({ secret: '12345678901234567890', time: 1111111109, digits: 8 });
       expect(topic).toBe('07081804');
     });
   });
 
-  describe("hexadecimal encoding with secret = '3132333435363738393031323334353637383930' as hexadecimal at time 1111111109", function () {
+  describe('hexadecimal encoding with secret = "3132333435363738393031323334353637383930" as hexadecimal at time 1111111109', function () {
     it('should return correct one-time password', function () {
       const topic = totpGenerate({ secret: '3132333435363738393031323334353637383930', encoding: 'hex', time: 1111111109 });
       expect(topic).toBe('081804');
     });
   });
 
-  describe("base32 encoding with secret = '1234567890' at time = 1111111109", function () {
+  describe('base32 encoding with secret = "1234567890" at time = 1111111109', function () {
     it('should return correct one-time password', function () {
       const topic = totpGenerate({ secret: '12345678901234567890', time: 1111111109 });
       expect(topic).toBe('081804');
     });
   });
 
-  describe("base32 encoding with secret = 'GEZDGNBVGY3TQOJQ' as base32 at time = 1111111109, digits = 8 and algorithm as 'sha256'", function () {
+  describe('base32 encoding with secret = "GEZDGNBVGY3TQOJQ" as base32 at time = 1111111109, digits = 8 and algorithm as "sha256"', function () {
     it('should return correct one-time password', function () {
       const topic = totpGenerate({ secret: 'GEZDGNBVGY3TQOJQ', encoding: 'base32', time: 1111111109, digits: 8, algorithm: 'sha256' });
       expect(topic).toBe('68084774');
     });
   });
 
-  describe("base32 encoding with secret = 'GEZDGNBVGY3TQOJQ' as base32 at time = 1111111109, digits = 8 and algorithm as 'sha512'", function () {
+  describe('base32 encoding with secret = "GEZDGNBVGY3TQOJQ" as base32 at time = 1111111109, digits = 8 and algorithm as "sha512"', function () {
     it('should return correct one-time password', function () {
       const topic = totpGenerate({ secret: 'GEZDGNBVGY3TQOJQ', encoding: 'base32', time: 1111111109, digits: 8, algorithm: 'sha512' });
       expect(topic).toBe('25091201');
     });
   });
 
-  describe("normal operation with secret = '12345678901234567890' with overridden counter 3", function () {
+  describe('normal operation with secret = "12345678901234567890" with overridden counter 3', function () {
     it('should return correct one-time password', function () {
       const topic = totpGenerate({ secret: '12345678901234567890', counter: 3 });
       expect(topic).toBe('969429');
     });
   });
 
-  describe("normal operation with secret = '12345678901234567890' with overridden counter 3", function () {
+  describe('normal operation with secret = "12345678901234567890" with overridden counter 3', function () {
     it('should return correct one-time password', function () {
       const topic = totpGenerate({ secret: '12345678901234567890', counter: 3 });
       expect(topic).toBe('969429');
@@ -106,7 +106,7 @@ describe('TOTP Time-Based Algorithm Test', function () {
       expect(() => {
         totpVerifyDelta({
           secret: secret, token: '663640', counter: 1, window: 1
-        })
+        });
       }).toThrow('No matching code found');
     });
 
@@ -126,4 +126,4 @@ describe('TOTP Time-Based Algorithm Test', function () {
       expect(delta.delta).toStrictEqual(-2);
     });
   });
-})
+});

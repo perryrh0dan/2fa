@@ -4,7 +4,7 @@ import { counter, totpGenerate } from '../src/totp/totp'
    This section provides test values that can be used for the HOTP time-
    based variant algorithm interoperability test.
    The test token shared secret uses the ASCII string value
-   "12345678901234567890".  With Time Step X = 30, and the Unix epoch as
+   '12345678901234567890'.  With Time Step X = 30, and the Unix epoch as
    the initial value to count time steps, where T0 = 0, the TOTP
    algorithm will display the following values for specified modes and
    timestamps.
