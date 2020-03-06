@@ -3,8 +3,8 @@ export interface HtopGenerateOptions {
   counter: number;
   digest?: Buffer;
   digits?: number;
-  encoding?: "ascii" | "hex" | 'base32' | "base64";
-  algorithm?: "sha1" | "sha256" | "sha512";
+  encoding?: 'ascii' | 'hex' | 'base32' | 'base64';
+  algorithm?: 'sha1' | 'sha256' | 'sha512';
 }
 
 export interface HtopVerifyOptions extends HtopGenerateOptions {

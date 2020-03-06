@@ -1,6 +1,6 @@
-import { hotpGenerate, hotpVerifyDelta } from "../hotp/hotp";
-import { TotpGenerateOptions, VerifyOptions, CounterOptions } from "./types";
-import { VerifyDelta } from "../hotp";
+import { hotpGenerate, hotpVerifyDelta } from '../hotp/hotp';
+import { TotpGenerateOptions, VerifyOptions, CounterOptions } from './types';
+import { VerifyDelta } from '../hotp';
 
 /**
  * Generate a time-based one-time token. Specify the key, and receive the
@@ -17,11 +17,11 @@ export function totpGenerate(options: TotpGenerateOptions): string {
 
   // calculate default counter value
   // weird typescript stuff
-  const opts: any = options
-  opts.counter = options.counter || counter(options)
+  const opts: any = options;
+  opts.counter = options.counter || counter(options);
 
   // pass to hotp
-  return hotpGenerate(opts)
+  return hotpGenerate(opts);
 };
 
 /**
@@ -47,17 +47,17 @@ export function totpVerifyDelta(options: VerifyOptions): VerifyDelta {
   // verify secret and token exist
   var secret = options.secret;
   var token = options.token;
-  if (secret === null || typeof secret === "undefined")
-    throw new Error("Speakeasy - totp.verifyDelta - Missing secret");
-  if (token === null || typeof token === "undefined")
-    throw new Error("Speakeasy - totp.verifyDelta - Missing token");
+  if (secret === null || typeof secret === 'undefined')
+    throw new Error('Speakeasy - totp.verifyDelta - Missing secret');
+  if (token === null || typeof token === 'undefined')
+    throw new Error('Speakeasy - totp.verifyDelta - Missing token');
 
   // unpack options
   var window = options.window || 0;
 
   // calculate default counter value
-  const opts: any = options
-  opts.counter = options.counter || counter(options)
+  const opts: any = options;
+  opts.counter = options.counter || counter(options);
 
   // adjust for two-sided window
   opts.counter -= window;
@@ -84,7 +84,7 @@ export function totpVerify(options: VerifyOptions): boolean {
   try {
     return totpVerifyDelta(options) != null;
   } catch (error) {
-    return false
+    return false;
   }
 };
 

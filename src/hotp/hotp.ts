@@ -1,7 +1,7 @@
-import { createHmac } from "crypto";
-import { base32Decode } from "../base32";
-import { HtopGenerateOptions, HtopVerifyOptions, VerifyDelta } from "./types";
-import { arrayBufferToBuffer } from "../utils";
+import { createHmac } from 'crypto';
+import { base32Decode } from '../base32';
+import { HtopGenerateOptions, HtopVerifyOptions, VerifyDelta } from './types';
+import { arrayBufferToBuffer } from '../utils';
 
 /**
  * Digest the one-time passcode options.
@@ -10,29 +10,29 @@ export function digest(options: HtopGenerateOptions): Buffer {
   // unpack options
   const secret = options.secret;
   const counter = options.counter;
-  const encoding = options.encoding || 'ascii'
-  const algorithm = options.algorithm || "sha1"
+  const encoding = options.encoding || 'ascii';
+  const algorithm = options.algorithm || 'sha1';
 
   // convert secret to buffer
   let secretBuffer: Buffer;
   if (!Buffer.isBuffer(secret)) {
     if (encoding === 'base32') {
       const arrayBuffer = base32Decode(secret);
-      secretBuffer = arrayBufferToBuffer(arrayBuffer)
+      secretBuffer = arrayBufferToBuffer(arrayBuffer);
     } else {
-      secretBuffer = Buffer.from(secret, encoding)
+      secretBuffer = Buffer.from(secret, encoding);
     }
   } else {
-    secretBuffer = secret
+    secretBuffer = secret;
   }
 
 
   let secret_buffer_size;
-  if (algorithm === "sha1") {
+  if (algorithm === 'sha1') {
     secret_buffer_size = 20; // 20 bytes
-  } else if (algorithm === "sha256") {
+  } else if (algorithm === 'sha256') {
     secret_buffer_size = 32; // 32 bytes
-  } else if (algorithm === "sha512") {
+  } else if (algorithm === 'sha512') {
     secret_buffer_size = 64; // 64 bytes
   }
 
@@ -41,9 +41,9 @@ export function digest(options: HtopGenerateOptions): Buffer {
   if (secret_buffer_size && secret.length !== secret_buffer_size) {
     secretBuffer = new Buffer(
       Array(Math.ceil(secret_buffer_size / secretBuffer.length) + 1).join(
-        secretBuffer.toString("hex")
+        secretBuffer.toString('hex')
       ),
-      "hex"
+      'hex'
     ).slice(0, secret_buffer_size);
   }
 
@@ -92,7 +92,7 @@ export function hotpGenerate(options: HtopGenerateOptions): string {
     (hmacDigest[offset + 3] & 0xff);
 
   // left-pad code
-  const codeArray = new Array(digits + 1).join("0") + code.toString(10);
+  const codeArray = new Array(digits + 1).join('0') + code.toString(10);
 
   // return length number off digits
   return codeArray.substr(-digits);
@@ -117,10 +117,10 @@ export function hotpVerifyDelta(options: HtopVerifyOptions): VerifyDelta {
   // verify secret and token exist
   var secret = options.secret;
   var token = options.token;
-  if (secret === null || typeof secret === "undefined")
-    throw new Error("2fa - hotp.verifyDelta - Missing secret");
-  if (token === null || typeof token === "undefined")
-    throw new Error("2fa - hotp.verifyDelta - Missing token");
+  if (secret === null || typeof secret === 'undefined')
+    throw new Error('2fa - hotp.verifyDelta - Missing secret');
+  if (token === null || typeof token === 'undefined')
+    throw new Error('2fa - hotp.verifyDelta - Missing token');
 
   // unpack options
   var token = options.token;
@@ -130,7 +130,7 @@ export function hotpVerifyDelta(options: HtopVerifyOptions): VerifyDelta {
 
   // fail if token is not of correct length
   if (token.length !== digits) {
-    throw new Error("Wrong token length")
+    throw new Error('Wrong token length');
   }
 
   // parse token to integer
@@ -138,7 +138,7 @@ export function hotpVerifyDelta(options: HtopVerifyOptions): VerifyDelta {
 
   // fail if token is NA
   if (isNaN(tokenNumber)) {
-    throw new Error("Cant parse token to number")
+    throw new Error('Cant parse token to number');
   }
 
   // loop from C to C + W inclusive
@@ -151,7 +151,7 @@ export function hotpVerifyDelta(options: HtopVerifyOptions): VerifyDelta {
     }
   }
 
-  throw new Error("No matching code found")
+  throw new Error('No matching code found');
 }
 
 /**
@@ -160,10 +160,10 @@ export function hotpVerifyDelta(options: HtopVerifyOptions): VerifyDelta {
  * instead of an object. For more on how to use a window with this, see
  * {@link hotp.verifyDelta}.
  */
-export function hotpVerify(options: HtopVerifyOptions) {
+export function hotpVerify(options: HtopVerifyOptions): boolean {
   try {
     return hotpVerifyDelta(options) != null;
   } catch (error) {
-    return false
+    return false;
   }
 }

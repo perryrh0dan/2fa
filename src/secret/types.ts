@@ -8,10 +8,10 @@ export interface SecretOptions {
 export interface ImageOptions{
   type?: 'totp' | 'hotp'
   counter?: number
-  algorithm?: "sha1" | "sha256" | "sha512"
+  algorithm?: 'sha1' | 'sha256' | 'sha512'
   digits?: number
   period?: number
-  encoding?: "ascii" | "hex" | "base32" | "base64"
+  encoding?: 'ascii' | 'hex' | 'base32' | 'base64'
 }
 
 export type Query = {

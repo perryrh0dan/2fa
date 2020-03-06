@@ -9,28 +9,28 @@ export class SecretKey {
   private _label: string
   private _issuer: string
 
-  constructor(secret: string, label: string, issuer: string) {
+  public constructor(secret: string, label: string, issuer: string) {
     this._secret = secret;
     this._label = label;
     this._issuer = issuer;
   }
 
-  get secret(): string {
-    return this._secret
+  public get secret(): string {
+    return this._secret;
   }
 
-  get label() {
-    return this._label
+  public get label(): string {
+    return this._label;
   }
 
-  get issuer() {
-    return this._issuer
+  public get issuer(): string {
+    return this._issuer;
   }
 
   public async image(options?: ImageOptions): Promise<string> {
-    const otpauthURL = this.otpauthURL(options)
-    const qrcode = create(otpauthURL, {})
-    return toString(qrcode.segments)
+    const otpauthURL = this.otpauthURL(options);
+    const qrcode = create(otpauthURL, {});
+    return toString(qrcode.segments);
   }
 
   /**
@@ -45,9 +45,9 @@ export class SecretKey {
    * To generate a suitable QR Code, pass the generated URL to a QR Code
    * generator, such as the `qr-image` module.
    */
-  public otpauthURL(options?: ImageOptions) {
+  public otpauthURL(options?: ImageOptions): string {
     // unpack options
-    if (!options) options = {}
+    if (!options) options = {};
     var secret = this.secret;
     var label = this.label;
     var issuer = this.issuer;
@@ -71,7 +71,7 @@ export class SecretKey {
     }
 
     // build query while validating
-    const query: Query = { secret: secret }
+    const query: Query = { secret: secret };
 
     if (issuer) query.issuer = issuer;
     if (type === 'hotp') {
@@ -109,7 +109,7 @@ export class SecretKey {
  * URL). Use a QR code library to generate a QR code based on the Google
  * Authenticator URL to obtain a QR code you can scan into the app.
  */
-export function generateSecret(options?: SecretOptions) {
+export function generateSecret(options?: SecretOptions): SecretKey {
   // options
   if (!options) options = {};
   const length = options.length || 32;
