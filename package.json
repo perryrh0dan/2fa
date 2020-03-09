@@ -2,8 +2,9 @@
   "name": "@perryrh0dan/2fa",
   "productName": "2fa",
   "version": "0.0.1",
-  "description": "",
+  "description": "TOTP and HOTP package for nodejs",
   "main": "index.js",
+  "types": "index.d.ts",
   "repository": "https://github.com/perryrh0dan/totp",
   "license": "MIT",
   "author": {
@@ -13,6 +14,7 @@
   },
   "scripts": {
     "build": "gulp buildTest",
+    "build:prod": "bash scripts/build.sh",
     "test": "npm run unit && npm run lint",
     "unit": "jest --no-cache",
     "lint": "eslint ./src/**/*.ts ./tests/**/*.ts"
