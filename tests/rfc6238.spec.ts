@@ -1,4 +1,4 @@
-import { counter, totpGenerate } from '../src/totp/totp'
+import { counter, totpGenerate } from '../src/totp/totp';
 
 /*
    This section provides test values that can be used for the HOTP time-
@@ -160,7 +160,7 @@ describe('RFC 6238 test vector', function () {
     counter: 0x27BC86AA,
     code: '47863826',
     algorithm: 'sha512'
-  }].forEach(function (subject) {
+  }].forEach(function (subject: any) {
     var key = new Buffer('12345678901234567890');
 
     it('should calculate counter value for time ' + subject.time, function () {

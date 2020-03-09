@@ -15,7 +15,7 @@
     "build": "gulp buildTest",
     "test": "npm run unit && npm run lint",
     "unit": "jest --no-cache",
-    "lint": "eslint ./src/**/*.ts"
+    "lint": "eslint ./src/**/*.ts ./tests/**/*.ts"
   },
   "engines": {
     "node": ">=8"

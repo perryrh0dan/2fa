@@ -95,16 +95,16 @@ describe('HOTP Counter-Based Algorithm Test', function () {
       const secret = 'rNONHRni6BAk7y2TiKrv';
       expect(() => {hotpVerifyDelta({
         secret: secret, token: '3140971', counter: 1,
-      })}).toThrowError('Wrong token length')
-    })
-  })
+      });}).toThrowError('Wrong token length');
+    });
+  });
 
   describe('test verification with non numeric token', function () {
     it('should throw error', function () {
       const secret = 'rNONHRni6BAk7y2TiKrv';
       expect(() => {hotpVerifyDelta({
         secret: secret, token: 'A1409A', counter: 1,
-      })}).toThrowError('Cant parse token to number')
-    })
-  })
+      });}).toThrowError('Cant parse token to number');
+    });
+  });
 });
