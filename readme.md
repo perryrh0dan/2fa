@@ -74,7 +74,7 @@ secret = generateSecret({ label: "accountName", issuer: "issuerName" })
 code = hotpGenerate(secret.secret, counter)
 
 // Verify code
-hotpVerify({ secret: secret.secret, token: code, counter: counter})
+hotpVerify({ secret: secret.secret, token: code, counter: counter}) //true
 
 // Generate a provisioning URI
 secret.otpauthURL(counter)

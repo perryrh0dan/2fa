@@ -1,0 +1,13 @@
+{
+  "pkgRoot": "dist",
+  "branch": "master",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    ["@semantic-release/release-notes-generator", {
+      "preset": "eslint"
+    }],
+    ["@semantic-release/npm", {
+      "pkgRoot": "dist"
+    }]
+  ]
+}
