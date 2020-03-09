@@ -3,30 +3,34 @@ import { totpGenerate, totpVerify } from '../src/totp';
 import { hotpGenerate, hotpVerify } from '../src/hotp';
 
 describe('Test totp in end to end scenario', function () {
-  it('should be valid', function () {
-    const secret = generateSecret({
-      label: 'accountName',
-      issuer: 'issuerName',
+  describe('with default options', function() {
+    it('should be valid', function () {
+      const secret = generateSecret({
+        label: 'accountName',
+        issuer: 'issuerName',
+      });
+      const code = totpGenerate({ secret: secret.secret });
+      const valid = totpVerify({ secret: secret.secret, token: code });
+  
+      expect(valid).toBe(true);
     });
-    const code = totpGenerate({ secret: secret.secret });
-    const valid = totpVerify({ secret: secret.secret, token: code });
-
-    expect(valid).toBe(true);
   });
-
-  it('should be invalid', function () {
-    const secret = generateSecret({
-      label: 'accountName',
-      issuer: 'issuerName',
+  
+  describe('with window = -1 only for validation', function() {
+    it('should be invalid', function () {
+      const secret = generateSecret({
+        label: 'accountName',
+        issuer: 'issuerName',
+      });
+      const code = totpGenerate({ secret: secret.secret });
+      const valid = totpVerify({
+        secret: secret.secret,
+        token: code,
+        window: -1,
+      });
+  
+      expect(valid).toBe(false);
     });
-    const code = totpGenerate({ secret: secret.secret });
-    const valid = totpVerify({
-      secret: secret.secret,
-      token: code,
-      window: -1,
-    });
-
-    expect(valid).toBe(false);
   });
 });
 

@@ -51,7 +51,7 @@ import { counter, totpGenerate } from '../src/totp/totp';
                             Table 1: TOTP Table
 */
 
-describe('RFC 6238 test vector', function () {
+describe('Test RFC 6238 test values', function () {
   [{
     time: 59,
     date: new Date('1970-01-01T00:00:59Z'),

@@ -32,7 +32,7 @@ import { hotpGenerate, digest } from '../src/hotp/hotp';
    9        2679dc69        645520489     520489
 */
 
-describe('RFC 4226 test values', function () {
+describe('Test RFC 4226 test values', function () {
   describe('intermediate HMAC values', function () {
     [
       'cc93cf18508d94934c64b65d8ba7667fb7cde4b0',

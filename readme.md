@@ -54,7 +54,7 @@ npm install @perryrh0dan/2fa
 secret = generateSecret({ label: "accountName", issuer: "issuerName" })
 
 // Generate code
-code = totpGenerate(secret.secret)
+code = totpGenerate({ secret: secret.secret })
 
 // Verify code
 totpVerify({ secret: secret.secret, token: code) //true

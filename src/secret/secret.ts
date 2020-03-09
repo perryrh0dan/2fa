@@ -1,5 +1,5 @@
 import { randomBytes } from 'crypto';
-import { create, toString } from 'qrcode';
+import { create, QRCode } from 'qrcode';
 import { format } from 'url';
 import { base32Encode } from '../base32';
 import { ImageOptions, Query, SecretOptions } from './types';
@@ -27,10 +27,9 @@ export class SecretKey {
     return this._issuer;
   }
 
-  public async image(options?: ImageOptions): Promise<string> {
+  public image(options?: ImageOptions): QRCode {
     const otpauthURL = this.otpauthURL(options);
-    const qrcode = create(otpauthURL, {});
-    return toString(qrcode.segments);
+    return create(otpauthURL, {});
   }
 
   /**
@@ -41,11 +40,8 @@ export class SecretKey {
    * the app presents 6 digits codes to the user. According to the
    * documentation, the period and number of digits are currently ignored by
    * the app.
-   *
-   * To generate a suitable QR Code, pass the generated URL to a QR Code
-   * generator, such as the `qr-image` module.
    */
-  public otpauthURL(options?: ImageOptions): string {
+  public otpauthURL(options?: Partial<ImageOptions>): string {
     // unpack options
     if (!options) options = {};
     var secret = this.secret;
@@ -100,13 +96,12 @@ export class SecretKey {
  * URL). Use a QR code library to generate a QR code based on the Google
  * Authenticator URL to obtain a QR code you can scan into the app.
  */
-export function generateSecret(options?: SecretOptions): SecretKey {
+export function generateSecret(options: SecretOptions): SecretKey {
   // options
-  if (!options) options = {};
   const length = options.length || 32;
   const symbols = options.symbols || false;
-  const label = options.label || 'SecretKey';
-  const issuer = options.issuer || '';
+  const label = options.label;
+  const issuer = options.issuer;
 
   // generate an ascii key
   var key = generateSecretASCII(length, symbols);
