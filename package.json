@@ -5,7 +5,7 @@
   "description": "TOTP and HOTP package for nodejs",
   "main": "index.js",
   "types": "index.d.ts",
-  "repository": "https://github.com/perryrh0dan/totp",
+  "repository": "https://github.com/perryrh0dan/2fa",
   "license": "MIT",
   "author": {
     "name": "Thomas Pöhlmann",
