@@ -17,7 +17,8 @@
     "build:prod": "bash scripts/build.sh",
     "test": "npm run unit && npm run lint",
     "unit": "jest --no-cache",
-    "lint": "eslint ./src/**/*.ts ./tests/**/*.ts"
+    "lint": "eslint ./src/**/*.ts ./tests/**/*.ts",
+    "semantic-release": "semantic-release"
   },
   "engines": {
     "node": ">=8"
