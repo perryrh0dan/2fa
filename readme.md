@@ -14,7 +14,7 @@
     <img alt="Code Coverage" src="https://codecov.io/gh/perryrh0dan/2fa/branch/master/graph/badge.svg" />
   </a>
   <a href="https://codeclimate.com/github/perryrh0dan/2fa/maintainability">
-    <img src="https://api.codeclimate.com/v1/badges/d54f93a65002540e39ea/maintainability" />
+    <img src="https://api.codeclimate.com/v1/badges/1597f83b289ebf3d68d3/maintainability" />
   </a>
   <a href="https://www.npmjs.com/package/@perryrh0dan/2fa">
     <img alt="NPM Downloads" src="https://img.shields.io/npm/dt/@perryrh0dan/2fa" />

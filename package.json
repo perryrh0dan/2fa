@@ -23,7 +23,10 @@
     "node": ">=8"
   },
   "keywords": [
-    "totp"
+    "totp",
+    "hotp",
+    "2fa",
+    "authentication"
   ],
   "devDependencies": {
     "@semantic-release/commit-analyzer": "^8.0.1",
