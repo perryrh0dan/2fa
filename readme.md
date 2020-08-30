@@ -23,7 +23,7 @@
 
 ## Descriptions
 
-2fa is a node.js package for generating and verifying one-time passwords. It can be used to implement two-factor (2FA) or multi-factor(MFA) authentication methods in anywhere that requires users to log in.
+2fa is a zero dependency node.js package for generating and verifying one-time passwords. It can be used to implement two-factor (2FA) or multi-factor(MFA) authentication methods in anywhere that requires users to log in.
 
 Open MFA standards are defined in RFC [4226]([https://tools.ietf.org/html/rfc4226) (HOTP: An HMAC-Based One-Time Password Algorithm) and in RFC [6238](https://tools.ietf.org/html/rfc6238) (TOTP: Time-Based One-Time Password Algorithm). GOTP implements server-side support for both of these standards.
 
